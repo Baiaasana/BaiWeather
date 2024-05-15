@@ -7,20 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.baiweather.R
+import com.example.baiweather.databinding.FragmentForecastBinding
 import com.example.baiweather.databinding.FragmentOnBoardingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
 
-    private var _binding: FragmentOnBoardingBinding? = null
+    private var _binding: FragmentForecastBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentOnBoardingBinding.inflate(inflater, container, false)
+        _binding = FragmentForecastBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,8 +31,6 @@ class ForecastFragment : Fragment() {
     }
 
     private fun listeners() {
-        binding.btnClick.setOnClickListener {
-            findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToMainFragment())
-        }
+
     }
 }

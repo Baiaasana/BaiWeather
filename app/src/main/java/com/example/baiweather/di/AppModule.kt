@@ -1,6 +1,7 @@
 package com.example.baiweather.di
 
 import android.app.Application
+import com.example.baiweather.common.Constants
 import com.example.baiweather.data.remote.WeatherApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -22,7 +23,7 @@ object AppModule {
     @Singleton
     fun providesWeatherApi(): WeatherApi {
         return Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
