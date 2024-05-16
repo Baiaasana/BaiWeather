@@ -9,13 +9,22 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="wrap_content"
-        android:id="@+id/btnClick"
+        android:id="@+id/btnCurrent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="wrap_content"
-        android:text="forecast" />
+        android:text="Current" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:id="@+id/btnDaily"
+        app:layout_constraintTop_toBottomOf="@id/btnCurrent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:text="Daily" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

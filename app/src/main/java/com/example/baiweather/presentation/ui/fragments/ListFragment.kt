@@ -9,7 +9,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentListBinding
 import com.example.baiweather.databinding.FragmentOnBoardingBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!

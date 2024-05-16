@@ -11,7 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentMainBinding
 import com.example.baiweather.databinding.FragmentOnBoardingBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
@@ -33,8 +35,8 @@ class MainFragment : Fragment() {
     private fun setupNavigation() {
 
         val navHostFragment =
-            this.childFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment
-        val navController = navHostFragment.findNavController()
+            this.childFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as? NavHostFragment ?: NavHostFragment.create(R.navigation.main_nav_graph)
+        val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
     }
