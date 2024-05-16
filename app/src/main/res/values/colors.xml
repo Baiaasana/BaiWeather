@@ -4,5 +4,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="yellow">#FFEB3B</color>
+    <color name="additional">c2c7cf</color>
+    <color name="blue">#97cbff</color>
+
+    <color name="main_white">#e0e2e8</color>
+    <color name="grey_for_time">#b9c9da</color>
+
 
 </resources>

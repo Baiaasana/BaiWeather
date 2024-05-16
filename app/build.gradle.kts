@@ -1,3 +1,5 @@
+import com.android.builder.compiling.BuildConfigType
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -39,6 +41,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
@@ -75,6 +78,10 @@ dependencies {
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation ("com.jakewharton.timber:timber:5.0.1")
+
+    // hilt navigation
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+
 
 
 }

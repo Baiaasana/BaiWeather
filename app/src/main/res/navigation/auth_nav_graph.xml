@@ -20,5 +20,6 @@
         android:name="com.example.baiweather.presentation.ui.fragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+    <include app:graph="@navigation/main_nav_graph" />
 
 </navigation>
