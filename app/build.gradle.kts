@@ -1,11 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("dagger.hilt.android.plugin")
+    id ("androidx.navigation.safeargs")
     id ("kotlin-kapt")
-    id("androidx.navigation.safeargs")
-
-
+  id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -37,12 +35,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        viewBinding = true
-        dataBinding = true
-    }
 
+    }
+    buildFeatures{
+        viewBinding = true
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -53,19 +51,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Hilt
-//    implementation( "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("com.google.dagger:hilt-android:2.51")
-    kapt("com.google.dagger:hilt-android-compiler:2.51")
-    kapt ("androidx.hilt:hilt-compiler:1.2.0")
-
-    // Location Services
     implementation ("com.google.android.gms:play-services-location:21.2.0")
 
     // Retrofit
@@ -76,5 +64,15 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation ("com.jakewharton.timber:timber:5.0.1")
 
+    implementation ("com.google.dagger:hilt-android:2.51.1")
+    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+
 
 }
+//
+//kapt {
+//    correctErrorTypes true
+//}
