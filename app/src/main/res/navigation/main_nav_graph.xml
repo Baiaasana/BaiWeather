@@ -21,5 +21,4 @@
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" />
 
-
 </navigation>

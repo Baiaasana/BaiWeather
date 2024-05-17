@@ -6,12 +6,13 @@ buildscript {
         // other repositories...
         mavenCentral()
     }
+
     dependencies {
-        // other plugins...
-        classpath ("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7")
-        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.51.1")
+        classpath (libs.hilt.android.gradle.plugin)
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
     }
 }
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false

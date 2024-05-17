@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id ("androidx.navigation.safeargs")
     id ("kotlin-kapt")
-  id ("com.google.dagger.hilt.android")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -37,9 +37,9 @@ android {
         jvmTarget = "1.8"
 
     }
-    buildFeatures{
-        viewBinding = true
+  buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -54,21 +54,31 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation ("com.google.android.gms:play-services-location:21.2.0")
+    // hilt
+    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt (libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.fragment)
 
-    // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+    // location
+    implementation (libs.play.services.location)
 
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation ("com.jakewharton.timber:timber:5.0.1")
+    // retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.moshi)
+    implementation (libs.logging.interceptor)
 
-    implementation ("com.google.dagger:hilt-android:2.51.1")
-    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+    //okhttp
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
 
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    // lifecycle
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+
+    // timber
+    implementation (libs.timber)
+
 
 
 }

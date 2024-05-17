@@ -1,10 +1,10 @@
 package com.example.baiweather.data.repository
 
 import com.example.baiweather.data.remote.CurrentWeatherDto
+import com.example.baiweather.data.remote.DailyWeatherDto
 import com.example.baiweather.data.remote.WeatherApi
 import com.example.baiweather.domain.repository.WeatherRepository
 import com.example.baiweather.domain.util.Resource
-import com.example.baiweather.domain.weather.WeatherData
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(val weatherApi: WeatherApi) : WeatherRepository {
@@ -22,12 +22,20 @@ class WeatherRepositoryImpl @Inject constructor(val weatherApi: WeatherApi) : We
             Resource.Error(message = e.message ?: "Unknown error")
         }
     }
-
-    override suspend fun getHourlyData(lat: Double, long: Double): Resource<WeatherData> {
-        TODO("Not yet implemented")
+    // max number is 40 - 5 day per 3 hours
+    override suspend fun getDailyData(
+        lat: Double,
+        long: Double,
+        cnt: Int?
+    ): Resource<DailyWeatherDto> {
+        return try {
+            Resource.Success(
+                data = weatherApi.getDailyWeather(lat = lat, lon = long)
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 
-    override suspend fun getWeeklyData(lat: Double, long: Double): Resource<WeatherData> {
-        TODO("Not yet implemented")
-    }
 }
