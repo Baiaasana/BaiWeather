@@ -57,28 +57,28 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // hilt
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("com.google.dagger:hilt-android:2.51")
-    kapt("com.google.dagger:hilt-android-compiler:2.51")
-    kapt ("androidx.hilt:hilt-compiler:1.2.0")
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt (libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.fragment)
 
     // location
-    implementation ("com.google.android.gms:play-services-location:21.2.0")
+    implementation (libs.play.services.location)
 
     // retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+    implementation (libs.retrofit)
+    implementation (libs.converter.moshi)
+    implementation (libs.logging.interceptor)
 
     //okhttp
-    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
 
     // lifecycle
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
 
     // timber
-    implementation ("com.jakewharton.timber:timber:5.0.1")
+    implementation (libs.timber)
 
 }
