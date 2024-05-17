@@ -5,4 +5,7 @@
     <string name="forecast">Forecast</string>
     <string name="explore">Explore</string>
     <string name="nearby">Nearby</string>
+    <string name="current">Current</string>
+    <string name="daily">Daily</string>
+    <string name="onboarding">onBoarding</string>
 </resources>
