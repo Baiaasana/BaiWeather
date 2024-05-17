@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("dagger.hilt.android.plugin")
+    id ("androidx.navigation.safeargs")
     id ("kotlin-kapt")
-    id("androidx.navigation.safeargs")
-
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -36,8 +35,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
     }
-    buildFeatures {
+  buildFeatures {
         buildConfig = true
         viewBinding = true
     }
@@ -51,8 +51,6 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -81,4 +79,10 @@ dependencies {
     // timber
     implementation (libs.timber)
 
+
+
 }
+//
+//kapt {
+//    correctErrorTypes true
+//}
