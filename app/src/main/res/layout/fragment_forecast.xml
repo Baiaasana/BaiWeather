@@ -1,30 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/yellow"
+    android:background="@color/blue_light"
     tools:context=".presentation.ui.fragments.ForecastFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:id="@+id/btnCurrent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clWeather"
+        android:paddingTop="48dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/current" />
+        android:background="@drawable/rect_back"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:id="@+id/btnDaily"
-        app:layout_constraintTop_toBottomOf="@id/btnCurrent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/blue_text"
+            android:drawableStart="@drawable/map"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/location_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/now"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/grey_light"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tvLocation"
+            app:layout_constraintTop_toBottomOf="@id/tvLocation" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="start"
+            android:text="@string/now"
+            android:textColor="@color/blue_text"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivWeather" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFeels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="end"
+            android:text="Feels like: "
+            android:textColor="@color/yellow"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvFeelsLike"
+            app:layout_constraintStart_toStartOf="@+id/tvHigh"
+            app:layout_constraintTop_toBottomOf="@id/tvLowTemperature" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFeelsLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="end"
+            android:text="34 C"
+            android:textColor="@color/yellow"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/tvFeels"
+            app:layout_constraintTop_toTopOf="@id/tvFeels" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:includeFontPadding="false"
+            android:text="36"
+            android:textColor="@color/blue_text"
+            android:textSize="52sp"
+            app:layout_constraintStart_toStartOf="@id/tvNow"
+            app:layout_constraintTop_toBottomOf="@id/tvNow" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivWeather"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_sunnyrainy"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTemperature"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvTemperature"
+            app:layout_constraintTop_toTopOf="@+id/tvTemperature" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/high"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tvTemperature"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHighTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="34`c"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvHigh"
+            app:layout_constraintStart_toEndOf="@id/tvHigh"
+            app:layout_constraintTop_toTopOf="@+id/tvHigh" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/low"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvHighTemperature"
+            app:layout_constraintStart_toEndOf="@id/tvHighTemperature"
+            app:layout_constraintTop_toTopOf="@+id/tvHighTemperature" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLowTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="34`c"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvLow"
+            app:layout_constraintStart_toEndOf="@id/tvLow"
+            app:layout_constraintTop_toTopOf="@+id/tvLow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/daily" />
+        android:layout_margin="16dp"
+        app:tabTextColor="@color/grey_light"
+        android:backgroundTint="@color/blue_light"
+        app:tabUnboundedRipple="true"
+        app:tabIndicatorFullWidth="true"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorColor="@color/blue_medium"
+        app:tabIndicatorAnimationMode="linear"
+        app:layout_constraintTop_toBottomOf="@id/clWeather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
+        app:layout_constraintStart_toStartOf="@id/tab_layout"
+        app:layout_constraintEnd_toEndOf="@id/tab_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

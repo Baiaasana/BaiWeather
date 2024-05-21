@@ -4,8 +4,26 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forecast">Forecast</string>
     <string name="explore">Explore</string>
-    <string name="nearby">Nearby</string>
+    <string name="bookmark">Bookmarks</string>
     <string name="current">Current</string>
     <string name="daily">Daily</string>
     <string name="onboarding">onBoarding</string>
+    <!--    <string name="baiweather_forecast">BaiWeather Forecast</string>-->
+    <string name="baiweather_forecast"><font color="#DDB130">BaiWeather \n</font><font color="white">Forecast</font></string>
+    <string name="temperatures"><font color="black"> %1$d°/</font><font color="white"> %2$d°</font></string>
+    <string name="temperature">%1$d °C</string>
+    <string name="weather_desc">%1$s - %2$s</string>
+
+    <!--    <string name="weather_desc">%1$s - %2$s</string>-->
+<!--    <string name="temperatures">Hello, %1$s! You have %2$d new messages.</string>-->
+
+    <string name="get_start">Get Start</string>
+    <string name="now">Now</string>
+    <string name="location_location">Location, location</string>
+    <string name="high">High: </string>
+    <string name="low"> \u2022 Low: </string>
+    <string name="today">Today</string>
+    <string name="_5_day_forecast">5 Day Forecast</string>
+
+
 </resources>

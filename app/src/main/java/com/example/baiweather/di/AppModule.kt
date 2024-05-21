@@ -44,16 +44,6 @@ object AppModule {
         return retrofit.create(WeatherApi::class.java)
     }
 
-//    @Provides
-//    @Singleton
-//    fun providesWeatherApi(): WeatherApi {
-//        return Retrofit.Builder()
-//            .baseUrl(Constants.BASE_URL)
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .build()
-//            .create()
-//    }
-
     @Provides
     @Singleton
     fun providesFusedLocationProviderClient(application: Application): FusedLocationProviderClient {

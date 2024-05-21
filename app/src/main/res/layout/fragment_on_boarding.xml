@@ -4,17 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/blue_medium"
+    android:padding="16dp"
     tools:context=".presentation.ui.fragments.OnBoardingFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:id="@+id/btnClick"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/onboarding" />
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:src="@drawable/ic_sunnyrainy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appCompatTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="@string/baiweather_forecast"
+        android:textSize="52sp"
+        app:layout_constraintEnd_toEndOf="@+id/appCompatImageView"
+        app:layout_constraintStart_toStartOf="@+id/appCompatImageView"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/yellow_dark"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingHorizontal="36dp"
+        android:paddingVertical="12dp"
+        android:text="@string/get_start"
+        android:textColor="@color/blue_dark"
+        android:id="@+id/btnStart"
+        android:textSize="16sp"
+        app:cornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/appCompatTextView"
+        app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

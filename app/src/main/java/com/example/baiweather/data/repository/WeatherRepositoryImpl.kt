@@ -7,7 +7,7 @@ import com.example.baiweather.domain.repository.WeatherRepository
 import com.example.baiweather.domain.util.Resource
 import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor(val weatherApi: WeatherApi) : WeatherRepository {
+class WeatherRepositoryImpl @Inject constructor(private val weatherApi: WeatherApi) : WeatherRepository {
 
     override suspend fun getCurrentData(
         lat: Double,
@@ -30,7 +30,7 @@ class WeatherRepositoryImpl @Inject constructor(val weatherApi: WeatherApi) : We
     ): Resource<DailyWeatherDto> {
         return try {
             Resource.Success(
-                data = weatherApi.getDailyWeather(lat = lat, lon = long)
+                data = weatherApi.getDailyWeather(lat = lat, lon = long, days = cnt)
             )
         } catch (e: Exception) {
             e.printStackTrace()

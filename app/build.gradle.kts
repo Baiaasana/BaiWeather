@@ -54,20 +54,22 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+
+
     // hilt
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     kapt (libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.fragment)
-
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx)
     // location
     implementation (libs.play.services.location)
 
     // retrofit
     implementation (libs.retrofit)
     implementation (libs.converter.moshi)
-    implementation (libs.logging.interceptor)
 
     //okhttp
     implementation (libs.okhttp)
@@ -79,7 +81,12 @@ dependencies {
     // timber
     implementation (libs.timber)
 
+    //glide
+    implementation (libs.glide)
 
+
+    // viewpager2
+    implementation(libs.androidx.viewpager2)
 
 }
 //
