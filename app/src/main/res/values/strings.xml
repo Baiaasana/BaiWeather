@@ -9,7 +9,7 @@
     <string name="daily">Daily</string>
     <string name="onboarding">onBoarding</string>
     <!--    <string name="baiweather_forecast">BaiWeather Forecast</string>-->
-    <string name="baiweather_forecast"><font color="#DDB130">BaiWeather \n</font><font color="white">Forecast</font></string>
+    <string name="baiweather_forecast"><font color="#FF731D">BaiWeather \n</font><font color="white">Forecast</font></string>
     <string name="temperatures"><font color="black"> %1$d°/</font><font color="white"> %2$d°</font></string>
     <string name="temperature">%1$d °C</string>
     <string name="weather_desc">%1$s - %2$s</string>

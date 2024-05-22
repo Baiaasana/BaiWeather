@@ -33,7 +33,7 @@
         android:fontFamily="@font/poppins_medium"
         android:text="02:00"
         android:id="@+id/tvTime"
-        android:textColor="@color/blue_text"
+        android:textColor="@color/primary_text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

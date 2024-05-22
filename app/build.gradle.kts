@@ -88,6 +88,9 @@ dependencies {
     // viewpager2
     implementation(libs.androidx.viewpager2)
 
+    implementation (libs.androidx.datastore.preferences)
+
+
 }
 //
 //kapt {

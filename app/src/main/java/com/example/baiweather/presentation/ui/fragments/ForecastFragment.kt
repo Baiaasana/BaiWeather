@@ -1,16 +1,21 @@
 package com.example.baiweather.presentation.ui.fragments
 
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.baiweather.R
 import com.example.baiweather.common.Constants
 import com.example.baiweather.data.remote.CurrentWeatherDto
 import com.example.baiweather.databinding.FragmentForecastBinding
+import com.example.baiweather.presentation.DataStoreViewModel
 import com.example.baiweather.presentation.WeatherViewModel
 import com.example.baiweather.presentation.adapters.WeatherPagerAdapter
 import com.example.baiweather.presentation.util.extensions.setImage
@@ -27,6 +32,12 @@ class ForecastFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
+
+//    private val darkModePreferences by lazy { DarkModePreferences(requireContext()) }
+
+
+    private val dataStoreViewModel: DataStoreViewModel by viewModels()
+
     private lateinit var weatherPagerAdapter: WeatherPagerAdapter
 
     override fun onCreateView(
@@ -34,6 +45,13 @@ class ForecastFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentForecastBinding.inflate(inflater, container, false)
+        dataStoreViewModel.darkMode.observe(viewLifecycleOwner, Observer { isLightMode ->
+            if (isLightMode) {
+                binding.ivDarkMode.setImageResource(R.drawable.sun)
+            } else {
+                binding.ivDarkMode.setImageResource(R.drawable.moon)
+            }
+        })
         return binding.root
     }
 
@@ -42,7 +60,6 @@ class ForecastFragment : Fragment() {
         init()
         listeners()
         observers()
-
     }
 
     private fun init() {
@@ -66,7 +83,17 @@ class ForecastFragment : Fragment() {
 
     private fun listeners() {
         binding.pager.isUserInputEnabled = false
-
+        binding.ivDarkMode.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val currentNightMode = resources.configuration.uiMode and UI_MODE_NIGHT_MASK
+                if (currentNightMode == UI_MODE_NIGHT_NO) {
+                    dataStoreViewModel.saveDarkMode(false)
+                } else {
+                    dataStoreViewModel.saveDarkMode(true)
+                }
+            }
+            requireActivity().recreate()
+        }
     }
 
     private fun observers() {

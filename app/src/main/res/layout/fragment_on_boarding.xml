@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/blue_medium"
+    android:background="@color/background_medium"
     android:padding="16dp"
     tools:context=".presentation.ui.fragments.OnBoardingFragment">
 
@@ -35,12 +35,12 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/yellow_dark"
+        android:backgroundTint="@color/yellow"
         android:fontFamily="@font/poppins_semibold"
         android:paddingHorizontal="36dp"
         android:paddingVertical="12dp"
         android:text="@string/get_start"
-        android:textColor="@color/blue_dark"
+        android:textColor="@color/background_primary"
         android:id="@+id/btnStart"
         android:textSize="16sp"
         app:cornerRadius="50dp"

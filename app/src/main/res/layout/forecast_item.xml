@@ -36,7 +36,7 @@
         android:fontFamily="@font/poppins_medium"
         android:text="02:00"
         android:gravity="end"
-        android:textColor="@color/blue_text"
+        android:textColor="@color/secondary_text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

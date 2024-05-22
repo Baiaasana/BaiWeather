@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_light"
+    android:background="@color/background_primary"
     tools:context=".presentation.ui.fragments.ForecastFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,18 +21,27 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLocation"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/white"
             android:drawablePadding="8dp"
-            android:drawableTint="@color/blue_text"
+            android:includeFontPadding="false"
             android:drawableStart="@drawable/map"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivDarkMode"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="@string/location_location" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivDarkMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            app:layout_constraintBottom_toBottomOf="@id/tvLocation"
+            app:layout_constraintTop_toTopOf="@id/tvLocation"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvNow"
@@ -41,7 +50,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="@string/now"
             android:layout_marginTop="32dp"
-            android:textColor="@color/grey_light"
+            android:textColor="@color/primary_text"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/tvLocation"
             app:layout_constraintTop_toBottomOf="@id/tvLocation" />
@@ -53,7 +62,7 @@
             android:fontFamily="@font/poppins_medium"
             android:gravity="start"
             android:text="@string/now"
-            android:textColor="@color/blue_text"
+            android:textColor="@color/primary_text"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +77,7 @@
             android:fontFamily="@font/poppins_medium"
             android:gravity="end"
             android:text="Feels like: "
-            android:textColor="@color/yellow"
+            android:textColor="@color/secondary_text"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/tvFeelsLike"
             app:layout_constraintStart_toStartOf="@+id/tvHigh"
@@ -81,7 +90,7 @@
             android:fontFamily="@font/poppins_medium"
             android:gravity="end"
             android:text="34 C"
-            android:textColor="@color/yellow"
+            android:textColor="@color/secondary_text"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/tvFeels"
             app:layout_constraintTop_toTopOf="@id/tvFeels" />
@@ -93,7 +102,7 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="36"
-            android:textColor="@color/blue_text"
+            android:textColor="@color/secondary_text"
             android:textSize="52sp"
             app:layout_constraintStart_toStartOf="@id/tvNow"
             app:layout_constraintTop_toBottomOf="@id/tvNow" />
@@ -115,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/high"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/tvTemperature"
             app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
@@ -126,7 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="34`c"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvHigh"
             app:layout_constraintStart_toEndOf="@id/tvHigh"
@@ -138,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/low"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/tvHighTemperature"
             app:layout_constraintStart_toEndOf="@id/tvHighTemperature"
@@ -150,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="34`c"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvLow"
             app:layout_constraintStart_toEndOf="@id/tvLow"
@@ -163,12 +172,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:tabTextColor="@color/grey_light"
-        android:backgroundTint="@color/blue_light"
+        app:tabTextColor="@color/background_secondary"
+        android:backgroundTint="@color/background_primary"
         app:tabUnboundedRipple="true"
         app:tabIndicatorFullWidth="true"
-        app:tabSelectedTextColor="@color/white"
-        app:tabIndicatorColor="@color/blue_medium"
+        app:tabSelectedTextColor="@color/yellow"
+        app:tabIndicatorColor="@color/yellow"
         app:tabIndicatorAnimationMode="linear"
         app:layout_constraintTop_toBottomOf="@id/clWeather"
         app:layout_constraintEnd_toEndOf="parent"
