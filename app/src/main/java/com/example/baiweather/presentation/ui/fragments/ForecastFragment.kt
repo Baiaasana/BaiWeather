@@ -1,17 +1,21 @@
 package com.example.baiweather.presentation.ui.fragments
 
+import android.R
+import android.content.Context
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.example.baiweather.R
 import com.example.baiweather.common.Constants
 import com.example.baiweather.data.remote.CurrentWeatherDto
 import com.example.baiweather.databinding.FragmentForecastBinding
@@ -23,7 +27,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
@@ -31,7 +37,7 @@ class ForecastFragment : Fragment() {
     private var _binding: FragmentForecastBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
+    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
 
 //    private val darkModePreferences by lazy { DarkModePreferences(requireContext()) }
 
@@ -47,9 +53,9 @@ class ForecastFragment : Fragment() {
         _binding = FragmentForecastBinding.inflate(inflater, container, false)
         dataStoreViewModel.darkMode.observe(viewLifecycleOwner, Observer { isLightMode ->
             if (isLightMode) {
-                binding.ivDarkMode.setImageResource(R.drawable.sun)
+                binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.sun)
             } else {
-                binding.ivDarkMode.setImageResource(R.drawable.moon)
+                binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.moon)
             }
         })
         return binding.root
@@ -70,11 +76,11 @@ class ForecastFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = getString(R.string.today)
+                    tab.text = getString(com.example.baiweather.R.string.today)
                 }
 
                 1 -> {
-                    tab.text = getString(R.string.forecast)
+                    tab.text = getString(com.example.baiweather.R.string.forecast)
                 }
             }
         }.attach()
@@ -92,7 +98,7 @@ class ForecastFragment : Fragment() {
                     dataStoreViewModel.saveDarkMode(true)
                 }
             }
-            requireActivity().recreate()
+//            requireActivity().recreate()
         }
     }
 
@@ -109,15 +115,15 @@ class ForecastFragment : Fragment() {
     private fun setUpUI(data: CurrentWeatherDto) = with(binding) {
         tvLocation.text = data.name.toString()
         tvTemperature.text =
-            resources.getString(R.string.temperature, data.main?.temp?.roundToInt())
+            resources.getString(com.example.baiweather.R.string.temperature, data.main?.temp?.roundToInt())
         tvLowTemperature.text =
-            resources.getString(R.string.temperature, data.main?.tempMin?.roundToInt())
+            resources.getString(com.example.baiweather.R.string.temperature, data.main?.tempMin?.roundToInt())
         tvHighTemperature.text =
-            resources.getString(R.string.temperature, data.main?.tempMax?.roundToInt())
+            resources.getString(com.example.baiweather.R.string.temperature, data.main?.tempMax?.roundToInt())
         tvFeelsLike.text =
-            resources.getString(R.string.temperature, data.main?.feelsLike?.roundToInt())
+            resources.getString(com.example.baiweather.R.string.temperature, data.main?.feelsLike?.roundToInt())
         tvDescription.text = resources.getString(
-            R.string.weather_desc,
+            com.example.baiweather.R.string.weather_desc,
             data.weather?.get(0)?.main.toString(),
             data.weather?.get(0)?.description.toString()
         )

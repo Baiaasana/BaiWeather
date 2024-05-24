@@ -43,6 +43,9 @@ class WeekFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = forecastAdapter
         }
+        if(binding.rvForecast.itemDecorationCount != 0){
+            binding.rvForecast.removeItemDecorationAt(0)
+        }
         binding.rvForecast.addItemDecoration(ItemDecorator(12, vertical = true))
 
     }

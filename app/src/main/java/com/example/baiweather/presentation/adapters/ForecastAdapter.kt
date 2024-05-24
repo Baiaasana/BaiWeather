@@ -11,6 +11,7 @@ import com.example.baiweather.databinding.ForecastItemBinding
 import com.example.baiweather.databinding.HourlyItemBinding
 import com.example.baiweather.domain.data.ForecastData
 import com.example.baiweather.presentation.util.extensions.setImage
+import timber.log.Timber
 
 class ForecastAdapter : ListAdapter<ForecastData, RecyclerView.ViewHolder>(DiffCallback) {
 
@@ -19,6 +20,7 @@ class ForecastAdapter : ListAdapter<ForecastData, RecyclerView.ViewHolder>(DiffC
     inner class HourlyViewHolder(private var binding: HourlyItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ForecastData) = with(binding) {
+            Timber.tag("shidabidss").d("horizontal binds")
             ivWeather.setImage(item.icon)
             tvTemperature.text = context.resources.getString(R.string.temperature, item.temp)
             tvTime.text = item.time
@@ -29,6 +31,8 @@ class ForecastAdapter : ListAdapter<ForecastData, RecyclerView.ViewHolder>(DiffC
     inner class ForecastViewHolder(private var binding: ForecastItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ForecastData) = with(binding) {
+            Timber.tag("shidabidss").d("vertical binds")
+
             ivWeather.setImage(item.icon)
             tvDay.text = item.time
             tvTemperature.text =

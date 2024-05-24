@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/background_primary</item>
         <item name="android:windowBackground">@color/background_medium</item>
     </style>
+
+    <style name="Theme.BaiWeather.Night" parent="Base.Theme.BaiWeather" />
+
 </resources>

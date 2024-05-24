@@ -12,7 +12,15 @@
     <string name="baiweather_forecast"><font color="#FF731D">BaiWeather \n</font><font color="white">Forecast</font></string>
     <string name="temperatures"><font color="black"> %1$d°/</font><font color="white"> %2$d°</font></string>
     <string name="temperature">%1$d °C</string>
+    <string name="speed">%1$.2f km/h</string>
+    <string name="gradus">%1$d °</string>
+    <string name="percentage">%1$.2f %%</string>
+    <string name="rain_intensity">%1$.2f mm/h</string>
+    <string name="pressure_intensity">%1$.2f hPa</string>
     <string name="weather_desc">%1$s - %2$s</string>
+
+
+    <string name="some_text">The next word is  but that is all</string>
 
     <!--    <string name="weather_desc">%1$s - %2$s</string>-->
 <!--    <string name="temperatures">Hello, %1$s! You have %2$d new messages.</string>-->

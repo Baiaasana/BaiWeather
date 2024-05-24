@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.example.baiweather.databinding.ActivityMainBinding
 import com.example.baiweather.presentation.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

@@ -2,34 +2,36 @@ package com.example.baiweather.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentTodayBinding
 import com.example.baiweather.presentation.WeatherViewModel
-import com.example.baiweather.presentation.adapters.ForecastAdapter
+import com.example.baiweather.presentation.adapters.ListItem
+import com.example.baiweather.presentation.adapters.SuperAdapter
+import com.example.baiweather.presentation.mappers.DailyWeatherDto.toGridData
 import com.example.baiweather.presentation.mappers.DailyWeatherDto.toHourlyData
 import com.example.baiweather.presentation.util.ItemDecorator
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class TodayFragment : Fragment() {
     private var _binding: FragmentTodayBinding? = null
     private val binding get() = _binding!!
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
 
-    private val forecastAdapter by lazy { ForecastAdapter() }
+    private val superAdapter by lazy { SuperAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.tag("dhfgdhjfgd").d("fragment onCreateView")
         _binding = FragmentTodayBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,43 +43,33 @@ class TodayFragment : Fragment() {
     }
 
     private fun setUpRecycler() {
-        binding.rvHourlyForecast.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = forecastAdapter
-        }
-        binding.rvHourlyForecast.addItemDecoration(ItemDecorator(16, vertical = false))
-        val listener = object : RecyclerView.OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                val action = e.action
-                if (binding.rvHourlyForecast.canScrollHorizontally(RecyclerView.FOCUS_FORWARD)) {
-                    when (action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent
-                            .requestDisallowInterceptTouchEvent(true)
-                    }
-                    return false
-                } else {
-                    when (action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent
-                            .requestDisallowInterceptTouchEvent(false)
-                    }
-                    binding.rvHourlyForecast.removeOnItemTouchListener(this)
-                    return true
-                }
-            }
 
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        binding.rvSuper.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = superAdapter
         }
-        binding.rvHourlyForecast.addOnItemTouchListener(listener)
+
+        if (binding.rvSuper.itemDecorationCount != 0) {
+            binding.rvSuper.removeItemDecorationAt(0)
+        }
+        binding.rvSuper.addItemDecoration(ItemDecorator(12, vertical = true))
+
     }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.dailyWeatherState.collectLatest {
-                it.data?.let { dailyData ->
-                    forecastAdapter.submitList(dailyData.toHourlyData())
+            viewModel.dailyWeatherState
+                .filter { it.data != null } // Filter out states with null data
+                .collect { dailyData ->
+                    val items = listOf(
+                        dailyData.data?.toHourlyData()
+                            ?.let { ListItem.Horizontal(0, "Horizontal Items", it) },
+                        dailyData.data?.toGridData()
+                            ?.let { ListItem.Grid(1, "Grid Items", it) },
+                    )
+                    Timber.tag("collect").d("submit")
+                    superAdapter.submitList(items)
                 }
-            }
         }
     }
 }
