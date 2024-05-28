@@ -2,20 +2,20 @@ package com.example.baiweather.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentTodayBinding
-import com.example.baiweather.presentation.WeatherViewModel
-import com.example.baiweather.presentation.adapters.ForecastAdapter
+import com.example.baiweather.domain.util.Resource
+import com.example.baiweather.presentation.adapters.ListItem
+import com.example.baiweather.presentation.adapters.SuperAdapter
+import com.example.baiweather.presentation.mappers.DailyWeatherDto.toGridData
 import com.example.baiweather.presentation.mappers.DailyWeatherDto.toHourlyData
-import com.example.baiweather.presentation.util.ItemDecorator
+import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,7 @@ class TodayFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
 
-    private val forecastAdapter by lazy { ForecastAdapter() }
+    private val superAdapter by lazy { SuperAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,43 +41,34 @@ class TodayFragment : Fragment() {
     }
 
     private fun setUpRecycler() {
-        binding.rvHourlyForecast.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = forecastAdapter
-        }
-        binding.rvHourlyForecast.addItemDecoration(ItemDecorator(16, vertical = false))
-        val listener = object : RecyclerView.OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                val action = e.action
-                if (binding.rvHourlyForecast.canScrollHorizontally(RecyclerView.FOCUS_FORWARD)) {
-                    when (action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent
-                            .requestDisallowInterceptTouchEvent(true)
-                    }
-                    return false
-                } else {
-                    when (action) {
-                        MotionEvent.ACTION_MOVE -> rv.parent
-                            .requestDisallowInterceptTouchEvent(false)
-                    }
-                    binding.rvHourlyForecast.removeOnItemTouchListener(this)
-                    return true
-                }
-            }
 
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        binding.rvSuper.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = superAdapter
         }
-        binding.rvHourlyForecast.addOnItemTouchListener(listener)
     }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dailyWeatherState.collectLatest {
-                it.data?.let { dailyData ->
-                    forecastAdapter.submitList(dailyData.toHourlyData())
+                when (it) {
+                    is Resource.Success -> {
+                        val items = listOf(
+                            it.data.toHourlyData()
+                                .let { ListItem.Horizontal(0, getString(R.string.hourly), it) },
+                            it.data.toGridData()
+                                .let { ListItem.Grid(1, getString(R.string.forecast), it) },
+                        )
+                        superAdapter.submitList(items)
+                    }
+                    else -> {}
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

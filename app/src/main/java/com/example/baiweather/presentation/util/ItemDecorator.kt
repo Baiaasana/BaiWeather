@@ -27,6 +27,8 @@ class ItemDecorator(private val margin: Int, val vertical: Boolean? = true) :
 
         if (vertical == true) {
             outRect.bottom = rightMarginPx
+            outRect.bottom = rightMarginPx
+
         } else {
             if (itemPosition != parent.adapter!!.itemCount - 1) {
                 outRect.right = rightMarginPx

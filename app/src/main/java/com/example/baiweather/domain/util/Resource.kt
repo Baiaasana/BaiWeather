@@ -1,6 +1,15 @@
 package com.example.baiweather.domain.util
 
-sealed class Resource<T>(val data: T? = null, val message: String? = null) {
-    class Success<T>(data: T?): Resource<T>(data)
-    class Error<T>(message: String, data: T? = null): Resource<T>(data, message)
+sealed class Resource<out T> {
+    class Success<T>(val data: T) : Resource<T>()
+
+    class Error<T>(
+        val message: String? = null,
+        val data: T? = null,
+    ) : Resource<T>()
+
+    object Loading : Resource<Nothing>()
+
+    object Idle : Resource<Nothing>()
+
 }

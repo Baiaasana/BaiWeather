@@ -3,6 +3,7 @@ package com.example.baiweather.di
 import android.app.Application
 import com.example.baiweather.common.Constants
 import com.example.baiweather.data.remote.WeatherApi
+import com.example.baiweather.domain.use_cases.PreferencesUseCase
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -23,8 +24,8 @@ object AppModule {
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        level = HttpLoggingInterceptor.Level.BODY
+    }
 
     @Singleton
     @Provides
@@ -35,8 +36,8 @@ object AppModule {
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(
-                MoshiConverterFactory.create()
-            ).client(okHttpClient).build()
+            MoshiConverterFactory.create()
+        ).client(okHttpClient).build()
 
     @Provides
     @Singleton
@@ -48,5 +49,11 @@ object AppModule {
     @Singleton
     fun providesFusedLocationProviderClient(application: Application): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(application)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesUseCase(): PreferencesUseCase {
+        return PreferencesUseCase()
     }
 }

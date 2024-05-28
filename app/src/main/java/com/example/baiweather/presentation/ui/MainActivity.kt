@@ -7,9 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.Observer
 import com.example.baiweather.databinding.ActivityMainBinding
-import com.example.baiweather.presentation.DataStoreViewModel
+import com.example.baiweather.presentation.viewModels.PreferencesViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
-    private val dataStoreViewModel: DataStoreViewModel by viewModels()
+
+    private val preferencesViewModel: PreferencesViewmodel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +39,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun readPreferences() {
-        dataStoreViewModel.darkMode.observe(this, Observer { isLightMode ->
+        preferencesViewModel.darkMode.observe(this@MainActivity) { isLightMode ->
             if (isLightMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
-        })
+        }
     }
 }

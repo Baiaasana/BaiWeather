@@ -12,11 +12,12 @@
     <string name="baiweather_forecast"><font color="#FF731D">BaiWeather \n</font><font color="white">Forecast</font></string>
     <string name="temperatures"><font color="black"> %1$d°/</font><font color="white"> %2$d°</font></string>
     <string name="temperature">%1$d °C</string>
+    <string name="speed">%1$.2f km/h</string>
+    <string name="gradus">%1$d °</string>
+    <string name="percentage">%1$.2f %%</string>
+    <string name="rain_intensity">%1$.2f mm/h</string>
+    <string name="pressure_intensity">%1$.2f hPa</string>
     <string name="weather_desc">%1$s - %2$s</string>
-
-    <!--    <string name="weather_desc">%1$s - %2$s</string>-->
-<!--    <string name="temperatures">Hello, %1$s! You have %2$d new messages.</string>-->
-
     <string name="get_start">Get Start</string>
     <string name="now">Now</string>
     <string name="location_location">Location, location</string>
@@ -24,6 +25,11 @@
     <string name="low"> \u2022 Low: </string>
     <string name="today">Today</string>
     <string name="_5_day_forecast">5 Day Forecast</string>
+    <string name="feels_like">Feels like:</string>
+    <string name="_0_c">0 C</string>
+    <string name="_36_c">36 C</string>
+    <string name="_34_c">34`c</string>
+    <string name="hourly">Hourly</string>
 
 
 </resources>

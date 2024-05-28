@@ -10,10 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentWeekBinding
-import com.example.baiweather.presentation.WeatherViewModel
-import com.example.baiweather.presentation.adapters.ForecastAdapter
+import com.example.baiweather.domain.util.Resource
+import com.example.baiweather.presentation.adapters.ListItem
+import com.example.baiweather.presentation.adapters.SuperAdapter
 import com.example.baiweather.presentation.mappers.DailyWeatherDto.toForecastData
-import com.example.baiweather.presentation.util.ItemDecorator
+import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,7 @@ class WeekFragment : Fragment() {
     private var _binding: FragmentWeekBinding? = null
     private val binding get() = _binding!!
 
-    private val forecastAdapter by lazy { ForecastAdapter() }
+    private val superAdapter by lazy { SuperAdapter() }
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
 
     override fun onCreateView(
@@ -41,17 +42,29 @@ class WeekFragment : Fragment() {
     private fun setUpRecycler() {
         binding.rvForecast.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = forecastAdapter
+            adapter = superAdapter
         }
-        binding.rvForecast.addItemDecoration(ItemDecorator(12, vertical = true))
-
     }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dailyWeatherState.collectLatest {
-                it.data?.let { dailyData ->
-                    forecastAdapter.submitList(dailyData.toForecastData())
+                when (it) {
+                    is Resource.Success -> {
+                        val items = listOf(
+                            it.data.toForecastData()
+                                .let {
+                                    ListItem.Vertical(
+                                        0,
+                                        getString(R.string._5_day_forecast),
+                                        it
+                                    )
+                                },
+                        )
+                        superAdapter.submitList(items)
+                    }
+
+                    else -> {}
                 }
             }
         }

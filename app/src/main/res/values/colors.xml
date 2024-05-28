@@ -10,7 +10,7 @@
     <color name="background_secondary">#1679AB</color>
     <color name="yellow">#FF731D</color>
     <color name="yellow_light">#FEEFAD</color>
-
+    <color name="background_medium_reverse">#1F2E3E</color>
 
 
 </resources>

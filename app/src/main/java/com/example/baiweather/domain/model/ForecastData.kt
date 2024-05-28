@@ -1,7 +1,9 @@
-package com.example.baiweather.domain.data
+package com.example.baiweather.domain.model
+
+import java.util.UUID
 
 class ForecastData(
-    val isHourly: Boolean,
+    val id: UUID = UUID.randomUUID(),
     val temp: Int,
     val maxTemp: Int? = 0,
     val icon: String,
