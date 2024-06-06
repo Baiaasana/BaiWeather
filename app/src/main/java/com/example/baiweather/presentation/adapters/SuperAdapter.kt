@@ -14,6 +14,7 @@ import com.example.baiweather.presentation.util.ItemDecorator
 
 class SuperAdapter : ListAdapter<ListItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
+
     private val horizontalAdapter by lazy {
         HorizontalAdapter()
     }
@@ -134,13 +135,6 @@ class SuperAdapter : ListAdapter<ListItem, RecyclerView.ViewHolder>(DiffCallback
 
     class DiffCallback : DiffUtil.ItemCallback<ListItem>() {
         override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-            val x = when {
-                oldItem is ListItem.Horizontal && newItem is ListItem.Horizontal -> oldItem.id == newItem.id
-                oldItem is ListItem.Grid && newItem is ListItem.Grid -> oldItem.id == newItem.id
-                oldItem is ListItem.Vertical && newItem is ListItem.Vertical -> oldItem.id == newItem.id
-                else -> false
-            }
-
             return when {
                 oldItem is ListItem.Horizontal && newItem is ListItem.Horizontal -> oldItem.id == newItem.id
                 oldItem is ListItem.Grid && newItem is ListItem.Grid -> oldItem.id == newItem.id

@@ -15,6 +15,7 @@ import com.example.baiweather.data.remote.CurrentWeatherDto
 import com.example.baiweather.databinding.FragmentForecastBinding
 import com.example.baiweather.domain.util.Resource
 import com.example.baiweather.presentation.adapters.WeatherPagerAdapter
+import com.example.baiweather.presentation.util.ConnectivityLiveData
 import com.example.baiweather.presentation.util.extensions.setImage
 import com.example.baiweather.presentation.viewModels.PreferencesViewmodel
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
@@ -31,10 +32,17 @@ class ForecastFragment : Fragment() {
     private var _binding: FragmentForecastBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var connectivityLiveData: ConnectivityLiveData
+
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
     private val preferencesViewModel: PreferencesViewmodel by activityViewModels()
 
     private lateinit var weatherPagerAdapter: WeatherPagerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        connectivityLiveData = ConnectivityLiveData(application = requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,9 +63,39 @@ class ForecastFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkConnection()
         init()
         listeners()
         observers()
+    }
+
+    private fun checkConnection() {
+        connectivityLiveData.observe(viewLifecycleOwner) { isAvailable ->
+            when (isAvailable) {
+                true -> {
+                    viewModel.onFragmentReady()
+                    showView()
+                }
+
+                false -> {
+                    hideView()
+                }
+            }
+        }
+    }
+
+    private fun showView() {
+        binding.tvNoInternet.visibility = View.GONE
+        binding.clWeather.visibility = View.VISIBLE
+        binding.tabLayout.visibility = View.VISIBLE
+        binding.pager.visibility = View.VISIBLE
+    }
+
+    private fun hideView() {
+        binding.tvNoInternet.visibility = View.VISIBLE
+        binding.clWeather.visibility = View.GONE
+        binding.tabLayout.visibility = View.GONE
+        binding.pager.visibility = View.GONE
     }
 
     private fun init() {
@@ -117,6 +155,7 @@ class ForecastFragment : Fragment() {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.progressBar2.visibility = View.VISIBLE
                     }
+
                     else -> {}
                 }
             }

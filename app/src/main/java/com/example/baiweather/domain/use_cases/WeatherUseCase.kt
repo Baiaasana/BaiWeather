@@ -1,5 +1,7 @@
 package com.example.baiweather.domain.use_cases
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.baiweather.data.remote.CurrentWeatherDto
 import com.example.baiweather.data.remote.DailyWeatherDto
 import com.example.baiweather.domain.repository.WeatherRepository
@@ -13,6 +15,17 @@ class WeatherUseCase @Inject constructor(private val weatherRepository: WeatherR
 
     suspend fun getDailyData(lat: Double, long: Double, cnt: Int?): Resource<DailyWeatherDto> {
         return weatherRepository.getDailyData(lat, long, cnt)
+    }
+
+    val liveData = MutableLiveData<String>("data")
+
+
+    fun getLiveData(): LiveData<String> {
+        return liveData
+    }
+
+    fun getLiveData2(str: String): LiveData<String> {
+        return MutableLiveData(str.plus("404"))
     }
 
 }

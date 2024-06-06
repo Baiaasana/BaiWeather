@@ -22,13 +22,14 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/yellow" />
+        android:background="@color/selected_color" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
+        android:background="@color/background_primary"
         app:itemBackground="@color/background_primary"
         app:itemActiveIndicatorStyle="@style/Widget.Design.BottomNavigationView"
         app:itemIconTint="@drawable/text_color_selector"

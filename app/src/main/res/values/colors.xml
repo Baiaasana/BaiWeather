@@ -9,6 +9,8 @@
     <color name="background_medium">#03AED2</color>
     <color name="background_secondary">#1679AB</color>
     <color name="yellow">#FF731D</color>
+    <color name="selected_color">#FF731D</color>
+    <color name="unSelected_color">#1679AB</color>
     <color name="yellow_light">#FEEFAD</color>
     <color name="background_medium_reverse">#1F2E3E</color>
 
