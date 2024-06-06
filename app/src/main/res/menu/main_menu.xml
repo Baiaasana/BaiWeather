@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@id/forecastFragment"
-        android:icon="@drawable/ic_rainy"
-        android:title="@string/forecast" />
-
-    <item
         android:id="@id/exploreFragment"
-        android:icon="@drawable/ic_rainy"
+        android:icon="@drawable/map"
         android:title="@string/explore" />
 
     <item
+        android:id="@id/forecastFragment"
+        android:icon="@drawable/forecast"
+        android:title="@string/forecast" />
+
+    <item
         android:id="@id/listFragment"
-        android:icon="@drawable/ic_rainy"
-        android:title="@string/nearby" />
+        android:icon="@drawable/bookmark"
+        android:title="@string/bookmark" />
 </menu>

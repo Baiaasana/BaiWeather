@@ -5,16 +5,17 @@ import com.squareup.moshi.Json
 data class CurrentWeatherDto(
     val cod: Int? = 0,
     val message: Int? = 0,
-    val name: String? ="",  //city name
+    val name: String? = "",  //city name
     val id: Int? = 0,
     val timezone: Float? = 0f,
     val weather: List<Weather>? = emptyList(),
     val main: WeatherObject? = WeatherObject(),
     val wind: Wind? = Wind(),
     val dt: Long? = 0L,
-    val sys: SysInfo?  = SysInfo(),
+    val sys: SysInfo? = SysInfo(),
     @field:Json(name = "coord")
     val coordinates: Coordinates? = Coordinates()
+
 )
 
 data class WeatherObject(
@@ -37,7 +38,7 @@ data class Weather(
 )
 
 data class Wind(
-    val speed: Float?  =0f,
+    val speed: Float? = 0f,
     val deg: Int? = 0,
     val gust: Float? = 0f
 )
