@@ -7,10 +7,14 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.baiweather.BaiWeather.Companion.context
 import com.example.baiweather.common.Constants.DARK_MODE
 import com.example.baiweather.common.Constants.SETTINGS
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-object PreferencesDataStore {
+class PreferencesDataStore @Inject constructor(
+    @ApplicationContext context: Context
+){
 
     private val Context.dataStore by preferencesDataStore(SETTINGS)
     private val DARK_MODE_KEY = booleanPreferencesKey(DARK_MODE)

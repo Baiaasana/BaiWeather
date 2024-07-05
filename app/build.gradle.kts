@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
 
     implementation (libs.androidx.datastore.preferences)
+    implementation ("com.google.code.gson:gson:2.10.1")
 
 
 }

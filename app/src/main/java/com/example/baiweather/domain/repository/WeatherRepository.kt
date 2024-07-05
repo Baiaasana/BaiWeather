@@ -10,5 +10,7 @@ interface WeatherRepository {
 
     suspend fun getDailyData(lat: Double, long: Double, cnt: Int? = null): Resource<DailyWeatherDto>
 
+    suspend fun getCurrentDataByCity(city: String): Resource<CurrentWeatherDto>
+
 
 }

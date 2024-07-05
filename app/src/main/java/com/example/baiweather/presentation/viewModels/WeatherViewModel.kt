@@ -29,19 +29,23 @@ class WeatherViewModel @Inject constructor(
     val currentWeatherState: StateFlow<Resource<CurrentWeatherDto>> =
         _currentWeatherState.asStateFlow()
 
+    private val _cityWeatherState =
+        MutableStateFlow<Resource<CurrentWeatherDto>>(Resource.Idle)
+    val cityWeatherState: StateFlow<Resource<CurrentWeatherDto>> =
+        _cityWeatherState.asStateFlow()
+
     private val _dailyWeatherState = MutableStateFlow<Resource<DailyWeatherDto>>(Resource.Idle)
     val dailyWeatherState: StateFlow<Resource<DailyWeatherDto>> = _dailyWeatherState.asStateFlow()
 
     private lateinit var dataValue: LiveData<String>
     private lateinit var dataValue2: LiveData<String>
 
-
 //    Use map() when you want to transform a value emitted by a LiveData into a non-LiveData result.
 //    Use switchMap() when you need to switch to a different LiveData based on a trigger LiveData.
 
     // just test livedata
     private fun onGetNumber() {
-        dataValue = weatherUseCase.getLiveData().map {str ->
+        dataValue = weatherUseCase.getLiveData().map { str ->
             str.plus(str)
         }
 
@@ -50,7 +54,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun onFragmentReady(){
+    fun onFragmentReady() {
         onGetNumber()
         getCurrentWeather()
         getDailyWeather()
@@ -73,6 +77,14 @@ class WeatherViewModel @Inject constructor(
                 val data = weatherUseCase.getDailyData(location.latitude, location.longitude, null)
                 _dailyWeatherState.emit(data)
             }
+        }
+    }
+
+    fun getWeatherByCity(city: String) {
+        viewModelScope.launch {
+            _cityWeatherState.emit(Resource.Loading)
+            val data = weatherUseCase.getCurrentWeatherByCity(city)
+            _cityWeatherState.emit(data)
         }
     }
 }

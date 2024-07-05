@@ -13,8 +13,8 @@ import com.example.baiweather.databinding.FragmentTodayBinding
 import com.example.baiweather.domain.util.Resource
 import com.example.baiweather.presentation.adapters.ListItem
 import com.example.baiweather.presentation.adapters.SuperAdapter
-import com.example.baiweather.presentation.mappers.DailyWeatherDto.toGridData
-import com.example.baiweather.presentation.mappers.DailyWeatherDto.toHourlyData
+import com.example.baiweather.presentation.mappers.toGridData
+import com.example.baiweather.presentation.mappers.toHourlyData
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

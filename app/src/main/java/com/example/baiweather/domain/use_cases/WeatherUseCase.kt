@@ -17,8 +17,13 @@ class WeatherUseCase @Inject constructor(private val weatherRepository: WeatherR
         return weatherRepository.getDailyData(lat, long, cnt)
     }
 
-    val liveData = MutableLiveData<String>("data")
+    suspend fun getCurrentWeatherByCity(city: String): Resource<CurrentWeatherDto> {
+        return weatherRepository.getCurrentDataByCity(city)
+    }
 
+
+    // LiveData
+    val liveData = MutableLiveData<String>("data")
 
     fun getLiveData(): LiveData<String> {
         return liveData

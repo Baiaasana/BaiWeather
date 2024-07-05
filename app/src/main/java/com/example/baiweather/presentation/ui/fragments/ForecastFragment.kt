@@ -5,6 +5,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -116,6 +117,13 @@ class ForecastFragment : Fragment() {
     }
 
     private fun listeners() {
+
+        object : OnClickListener {
+            override fun onClick(v: View?) {
+                TODO("Not yet implemented")
+            }
+
+        }
         binding.pager.isUserInputEnabled = false
         binding.ivDarkMode.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {

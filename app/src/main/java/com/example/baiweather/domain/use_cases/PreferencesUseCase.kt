@@ -2,11 +2,14 @@ package com.example.baiweather.domain.use_cases
 
 import androidx.lifecycle.asLiveData
 import com.example.baiweather.data.local.PreferencesDataStore
+import javax.inject.Inject
 
-class PreferencesUseCase {
+class PreferencesUseCase @Inject constructor(
+    private val preferencesDataStore:PreferencesDataStore
+) {
 
-    val uiMode = PreferencesDataStore.darkModeFlow.asLiveData()
+    val uiMode = preferencesDataStore.darkModeFlow.asLiveData()
     suspend fun writeUiMode(isLightMode: Boolean) {
-        PreferencesDataStore.saveDarkMode(isLightMode)
+        preferencesDataStore.saveDarkMode(isLightMode)
     }
 }

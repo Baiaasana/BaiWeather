@@ -31,6 +31,7 @@
     <string name="_34_c">34`c</string>
     <string name="hourly">Hourly</string>
     <string name="no_internet_connection">No Internet Connection</string>
+    <string name="search_here">Search here...</string>
 
 
 </resources>

@@ -47,4 +47,15 @@ class WeatherRepositoryImpl @Inject constructor(private val weatherApi: WeatherA
         }
     }
 
+    override suspend fun getCurrentDataByCity(city: String): Resource<CurrentWeatherDto> {
+        return try {
+            Resource.Success(
+                data = weatherApi.getCurrentWeatherByCity(city = city)
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = "City not found")
+        }
+    }
+
 }

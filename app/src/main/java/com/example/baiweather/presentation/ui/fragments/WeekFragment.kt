@@ -13,7 +13,7 @@ import com.example.baiweather.databinding.FragmentWeekBinding
 import com.example.baiweather.domain.util.Resource
 import com.example.baiweather.presentation.adapters.ListItem
 import com.example.baiweather.presentation.adapters.SuperAdapter
-import com.example.baiweather.presentation.mappers.DailyWeatherDto.toForecastData
+import com.example.baiweather.presentation.mappers.toForecastData
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

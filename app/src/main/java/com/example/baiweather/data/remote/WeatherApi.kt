@@ -11,9 +11,13 @@ interface WeatherApi {
         @Query(Constants.LAT) lat: Double, @Query(Constants.LON) lon: Double
     ): CurrentWeatherDto
 
-
     @GET(Constants.DAILY_END_POINT)
     suspend fun getDailyWeather(
         @Query(Constants.LAT) lat: Double, @Query(Constants.LON) lon: Double, @Query(Constants.CNT) days: Int ?= 40
     ): DailyWeatherDto
+
+    @GET(Constants.CURRENT_END_POINT_BY_CITY)
+    suspend fun getCurrentWeatherByCity(
+        @Query(Constants.CITY) city: String
+    ): CurrentWeatherDto
 }

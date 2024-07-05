@@ -13,7 +13,7 @@
     <color name="unSelected_color">#FFF0CE</color>
     <color name="yellow_light">#FFC436</color>
     <color name="background_medium_reverse">#2496FF</color>
-<!--    FF731D-->
+    <color name="hint_color">#AFB1B3</color>
 
 
 

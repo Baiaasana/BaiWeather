@@ -6,7 +6,6 @@ import com.example.baiweather.domain.model.AdditionalInfo
 import com.example.baiweather.domain.model.ForecastData
 import kotlin.math.roundToInt
 
-object DailyWeatherDto {
 
     fun DailyWeatherDto.toGridData(): List<AdditionalInfo> {
         val list = mutableListOf<AdditionalInfo>()
@@ -71,4 +70,3 @@ object DailyWeatherDto {
         }
         return list
     }
-}
