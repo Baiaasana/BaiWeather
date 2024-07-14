@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.baiweather.BaiWeather.Companion.context
 import com.example.baiweather.common.Constants.DARK_MODE
 import com.example.baiweather.common.Constants.SETTINGS
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PreferencesDataStore @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext val context: Context
 ){
 
     private val Context.dataStore by preferencesDataStore(SETTINGS)
