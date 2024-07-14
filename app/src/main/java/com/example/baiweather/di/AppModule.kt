@@ -23,8 +23,8 @@ object AppModule {
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        level = HttpLoggingInterceptor.Level.BODY
+    }
 
     @Singleton
     @Provides
@@ -34,25 +34,17 @@ object AppModule {
     @Singleton
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
-        Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(
-                MoshiConverterFactory.create()
-            ).client(okHttpClient).build()
+        Retrofit.Builder().
+            baseUrl(Constants.BASE_URL)
+                .addConverterFactory(
+            MoshiConverterFactory.create()
+        ).client(okHttpClient).build()
 
     @Provides
     @Singleton
     fun providesWeatherApi(retrofit: Retrofit): WeatherApi {
         return retrofit.create(WeatherApi::class.java)
     }
-
-//    @Provides
-//    @Singleton
-//    fun providesWeatherApi(): WeatherApi {
-//        return Retrofit.Builder()
-//            .baseUrl(Constants.BASE_URL)
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .build()
-//            .create()
-//    }
 
     @Provides
     @Singleton

@@ -1,14 +1,11 @@
 package com.example.baiweather.presentation.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.example.baiweather.R
+import androidx.fragment.app.Fragment
 import com.example.baiweather.databinding.FragmentListBinding
-import com.example.baiweather.databinding.FragmentOnBoardingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,14 +19,5 @@ class ListFragment : Fragment() {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        listeners()
-    }
-
-    private fun listeners() {
-
     }
 }
