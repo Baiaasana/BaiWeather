@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,10 +22,12 @@ import com.example.baiweather.domain.util.Resource
 import com.example.baiweather.presentation.adapters.WeatherPagerAdapter
 import com.example.baiweather.presentation.util.ConnectivityLiveData
 import com.example.baiweather.presentation.util.extensions.setImage
+import com.example.baiweather.presentation.viewModels.CitiesViewmodel
 import com.example.baiweather.presentation.viewModels.PreferencesViewmodel
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -38,17 +41,19 @@ class ForecastFragment : Fragment() {
     private lateinit var connectivityLiveData: ConnectivityLiveData
 
     private var froSearch = false
+    private var currentCity: Int = -1
 
-    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
+    private val citiesViewmodel by viewModels<CitiesViewmodel>()
+    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
     private val preferencesViewModel: PreferencesViewmodel by activityViewModels()
 
     private lateinit var weatherPagerAdapter: WeatherPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResultListener(getString(R.string.requestkey)) { requestKey, bundle ->
-            val result = bundle.getBoolean(getString(R.string.fromexplore))
-            froSearch = result
+        setFragmentResultListener(getString(R.string.requestkey)) { _, bundle ->
+            val fromExplore = bundle.getBoolean(getString(R.string.fromexplore))
+            froSearch = fromExplore
         }
         connectivityLiveData = ConnectivityLiveData(application = requireActivity().application)
     }
@@ -60,14 +65,14 @@ class ForecastFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             preferencesViewModel.darkMode.observe(viewLifecycleOwner) {
                 if (it) {
-                    binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.sun)
+                    binding.ivDarkMode.setImageResource(R.drawable.sun)
                 } else {
-                    binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.moon)
+                    binding.ivDarkMode.setImageResource(R.drawable.moon)
                 }
             }
         }
 
-        if(froSearch){
+        if (froSearch) {
             froSearch = false
             viewModel.onFragmentReady()
         }
@@ -88,6 +93,7 @@ class ForecastFragment : Fragment() {
                     observers()
                     showView()
                 }
+
                 false -> {
                     hideView()
                 }
@@ -115,11 +121,11 @@ class ForecastFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = getString(com.example.baiweather.R.string.today)
+                    tab.text = getString(R.string.today)
                 }
 
                 1 -> {
-                    tab.text = getString(com.example.baiweather.R.string.forecast)
+                    tab.text = getString(R.string.forecast)
                 }
             }
         }.attach()
@@ -140,7 +146,12 @@ class ForecastFragment : Fragment() {
         }
 
         binding.ivBookmark.setOnClickListener {
-            binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
+            if (currentCity != -1) {
+                binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
+                citiesViewmodel.setBookmarkCity(
+                    isFavourite = binding.ivBookmark.isSelected, cityId = currentCity
+                )
+            }
         }
     }
 
@@ -161,7 +172,9 @@ class ForecastFragment : Fragment() {
                         }
 
                         is Resource.Success -> {
+                            citiesViewmodel.searchById(it.data.id!!.toInt())
                             setUpUI(it.data)
+                            currentCity = it.data.id.toInt()
                             binding.progressBar.visibility = View.GONE
                             binding.progressBar2.visibility = View.GONE
                         }
@@ -176,21 +189,29 @@ class ForecastFragment : Fragment() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                citiesViewmodel.searchResult.collectLatest {
+                    binding.ivBookmark.isSelected = it[0].isFavourite == true
+                }
+            }
+        }
     }
 
     private fun setUpUI(data: CurrentWeatherDto) = with(binding) {
         tvLocation.text = data.name.toString()
         tvTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.temp?.roundToInt()
+            R.string.temperature, data.main?.temp?.roundToInt()
         )
         tvLowTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.tempMin?.roundToInt()
+            R.string.temperature, data.main?.tempMin?.roundToInt()
         )
         tvHighTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.tempMax?.roundToInt()
+            R.string.temperature, data.main?.tempMax?.roundToInt()
         )
         tvFeelsLike.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.feelsLike?.roundToInt()
+            R.string.temperature, data.main?.feelsLike?.roundToInt()
         )
         tvDescription.text = data.weather?.get(0)?.description.toString()
         ivWeather.setImage(Constants.getIconUrl(data.weather?.get(0)?.icon.toString()))

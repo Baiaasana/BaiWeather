@@ -9,11 +9,14 @@ import com.example.baiweather.data.local.model.CityEntity
 @Dao
 interface CitiesDao {
 
-    @Query("SELECT * FROM cities")
-    fun getAll(): List<CityEntity>
+    @Query("SELECT * FROM cities WHERE isFavourite is 1")
+    fun getFavourites(): List<CityEntity>
 
     @Query("SELECT * FROM cities WHERE id IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<CityEntity>
+
+    @Query("UPDATE cities SET isFavourite = :isFavourite WHERE id = :cityId")
+    fun setBookmark(isFavourite: Boolean, cityId: Int): Int
 
     @Query("SELECT * FROM cities WHERE city LIKE :city LIMIT 10")
     fun findByName(city: String): List<CityEntity>

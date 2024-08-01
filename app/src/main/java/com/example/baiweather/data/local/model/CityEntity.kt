@@ -13,6 +13,7 @@ data class CityEntity(
     val name: String,
     @ColumnInfo(name = "country_code")
     val country: String,
+    val isFavourite: Boolean? = false,
     @Embedded
     val coord: Coordinates
 ) {

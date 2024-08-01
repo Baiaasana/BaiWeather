@@ -64,7 +64,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback {
     }
 
     private val preferencesViewmodel: PreferencesViewmodel by viewModels()
-    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
+    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
     private val citiesViewmodel by viewModels<CitiesViewmodel>()
 
     override fun onCreateView(
@@ -137,7 +137,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback {
 
     private fun observers() {
         preferencesViewmodel.darkMode.observe(viewLifecycleOwner) {
-            if(::map.isInitialized){
+            if (::map.isInitialized) {
                 if (it == true) {
                     map.mapColorScheme = MapColorScheme.LIGHT
                 } else {
@@ -175,10 +175,9 @@ class ExploreFragment : Fragment(), OnMapReadyCallback {
                                                 .title("${it.data.name} \n Click to show weather")
                                                 .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                                         )
-
-                                        map.setOnMarkerClickListener {
-                                            viewModel.getCurrentWeather(it.position)
-                                            viewModel.getDailyWeather(it.position)
+                                        map.setOnMarkerClickListener { mapItem ->
+                                            viewModel.getCurrentWeather(mapItem.position)
+                                            viewModel.getDailyWeather(mapItem.position)
                                             this@ExploreFragment.setFragmentResult(
                                                 getString(R.string.requestkey),
                                                 bundleOf(getString(R.string.fromexplore) to true)

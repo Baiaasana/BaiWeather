@@ -2,6 +2,7 @@ package com.example.baiweather.data.local.dao
 
 import android.content.Context
 import android.util.JsonReader
+import android.util.Log
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.baiweather.data.local.model.CityEntity
@@ -20,7 +21,6 @@ class PrepopulateCitiesCallback(private val db: CitiesDatabase, private val cont
 
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
-
         CoroutineScope(Dispatchers.IO).launch {
             prePopulateCities(context)
         }
@@ -33,6 +33,7 @@ class PrepopulateCitiesCallback(private val db: CitiesDatabase, private val cont
                 cities = withContext(Dispatchers.IO) {
                     readJsonStream(context.assets.open("city.list.json"))
                 }
+                Log.d("updatecity", "cities  ${cities.size} cities  ${cities[0]}")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -95,7 +96,7 @@ class PrepopulateCitiesCallback(private val db: CitiesDatabase, private val cont
             }
         }
         reader.endObject()
-        return CityEntity(id, cityName ?: "", country ?: "", coord ?: CityEntity.Coordinates())
+        return CityEntity(id, cityName ?: "", country ?: "", null, coord ?: CityEntity.Coordinates())
     }
 
     @Throws(IOException::class)

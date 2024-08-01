@@ -6,7 +6,7 @@ data class CurrentWeatherDto(
     val cod: Int? = 0,
     val message: Int? = 0,
     val name: String? = "",  //city name
-    val id: Int? = 0,
+    val id: Int? = -1,
     val timezone: Float? = 0f,
     val weather: List<Weather>? = emptyList(),
     val main: WeatherObject? = WeatherObject(),
@@ -15,7 +15,6 @@ data class CurrentWeatherDto(
     val sys: SysInfo? = SysInfo(),
     @field:Json(name = "coord")
     val coordinates: Coordinates? = null
-
 )
 
 data class WeatherObject(

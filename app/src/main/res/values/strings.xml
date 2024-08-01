@@ -40,6 +40,7 @@
     <string name="go_settings">Go Settings</string>
     <string name="later">later</string>
     <string name="alert">alert</string>
+    <string name="isfavourite">isFavourite</string>
 
 
 </resources>
