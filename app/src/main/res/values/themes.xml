@@ -3,7 +3,7 @@
     <style name="Base.Theme.BaiWeather" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/primary_text</item>
+        <item name="colorPrimary">@color/background_secondary</item>
         <item name="colorPrimaryDark">@color/secondary_text</item>
         <item name="colorAccent">@color/background_primary</item>
         <item name="android:windowBackground">@color/background_secondary</item>

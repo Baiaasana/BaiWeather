@@ -1,15 +1,13 @@
 package com.example.baiweather.presentation.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import com.example.baiweather.data.remote.CurrentWeatherDto
-import com.example.baiweather.data.remote.DailyWeatherDto
+import com.example.baiweather.data.remote.model.CurrentWeatherDto
+import com.example.baiweather.data.remote.model.DailyWeatherDto
 import com.example.baiweather.domain.location.LocationTracker
 import com.example.baiweather.domain.use_cases.WeatherUseCase
 import com.example.baiweather.domain.util.Resource
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,53 +35,50 @@ class WeatherViewModel @Inject constructor(
     private val _dailyWeatherState = MutableStateFlow<Resource<DailyWeatherDto>>(Resource.Idle)
     val dailyWeatherState: StateFlow<Resource<DailyWeatherDto>> = _dailyWeatherState.asStateFlow()
 
-    private lateinit var dataValue: LiveData<String>
-    private lateinit var dataValue2: LiveData<String>
-
-//    Use map() when you want to transform a value emitted by a LiveData into a non-LiveData result.
-//    Use switchMap() when you need to switch to a different LiveData based on a trigger LiveData.
-
-    // just test livedata
-    private fun onGetNumber() {
-        dataValue = weatherUseCase.getLiveData().map { str ->
-            str.plus(str)
-        }
-
-        dataValue2 = weatherUseCase.getLiveData().switchMap {
-            weatherUseCase.getLiveData2(it)
-        }
-    }
-
     fun onFragmentReady() {
-        onGetNumber()
-        getCurrentWeather()
-        getDailyWeather()
+        getCurrentWeather(null)
+        getDailyWeather(null)
     }
 
-    private fun getCurrentWeather() {
+    init {
+        getCurrentWeather(null)
+        getDailyWeather(null)
+    }
+
+    fun getCurrentWeather(latLng: LatLng?) {
         viewModelScope.launch {
             locationTracker.getCurrentLocation()?.let { location ->
                 _currentWeatherState.emit(Resource.Loading)
-                val data = weatherUseCase.getCurrentData(location.latitude, location.longitude)
+                val data = if (latLng == null) weatherUseCase.getCurrentData(
+                    location.latitude,
+                    location.longitude
+                )
+                else {
+                    weatherUseCase.getCurrentData(latLng.latitude, latLng.longitude)
+                }
                 _currentWeatherState.emit(data)
             }
         }
     }
 
-    private fun getDailyWeather() {
+    fun getDailyWeather(latLng: LatLng?) {
         viewModelScope.launch {
             locationTracker.getCurrentLocation()?.let { location ->
                 _dailyWeatherState.emit(Resource.Loading)
-                val data = weatherUseCase.getDailyData(location.latitude, location.longitude, null)
+                val data = if (latLng == null) {
+                    weatherUseCase.getDailyData(location.latitude, location.longitude, null)
+                } else {
+                    weatherUseCase.getDailyData(latLng.latitude, latLng.longitude, null)
+                }
                 _dailyWeatherState.emit(data)
             }
         }
     }
 
-    fun getWeatherByCity(city: String) {
+    fun getWeatherByCity(latLng: LatLng) {
         viewModelScope.launch {
             _cityWeatherState.emit(Resource.Loading)
-            val data = weatherUseCase.getCurrentWeatherByCity(city)
+            val data = weatherUseCase.getCurrentData(latLng.latitude, latLng.longitude)
             _cityWeatherState.emit(data)
         }
     }

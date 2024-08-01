@@ -25,13 +25,21 @@
     <string name="low"> \u2022 Low: </string>
     <string name="today">Today</string>
     <string name="_5_day_forecast">5 Day Forecast</string>
-    <string name="feels_like">Feels like:</string>
+    <string name="feels_like">"Feels like: "</string>
     <string name="_0_c">0 C</string>
     <string name="_36_c">36 C</string>
     <string name="_34_c">34`c</string>
     <string name="hourly">Hourly</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="search_here">Search here...</string>
+    <string name="requestkey">requestKey</string>
+    <string name="fromexplore">fromExplore</string>
+    <string name="my_cities">My Cities</string>
+    <string name="required_permissions">Required Permissions!</string>
+    <string name="allow_app_to_access_your_location">Allow app to access your location</string>
+    <string name="go_settings">Go Settings</string>
+    <string name="later">later</string>
+    <string name="alert">alert</string>
 
 
 </resources>

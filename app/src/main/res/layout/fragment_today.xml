@@ -1,25 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background_primary"
-    android:padding="16dp"
-    android:id="@+id/todayyyy"
     tools:context=".presentation.ui.fragments.TodayFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSuper"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_primary"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="3" />
+        android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHourly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/background_primary"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/yellow"
+            android:textSize="18sp"
+            android:text="@string/hourly"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHourly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/grid_bg"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@+id/tvHourly"
+            app:layout_constraintStart_toStartOf="@+id/tvHourly"
+            app:layout_constraintTop_toBottomOf="@+id/tvHourly"
+            tools:listitem="3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/background_primary"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/yellow"
+            android:textSize="18sp"
+            android:text="@string/forecast"
+            app:layout_constraintEnd_toEndOf="@+id/rvHourly"
+            app:layout_constraintStart_toStartOf="@+id/rvHourly"
+            app:layout_constraintTop_toBottomOf="@+id/rvHourly"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/background_primary"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@+id/tvItems"
+            app:layout_constraintStart_toStartOf="@+id/tvItems"
+            app:layout_constraintTop_toBottomOf="@+id/tvItems"
+            tools:listitem="3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

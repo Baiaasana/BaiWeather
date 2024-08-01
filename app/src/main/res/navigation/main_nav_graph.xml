@@ -9,12 +9,20 @@
         android:id="@+id/forecastFragment"
         android:name="com.example.baiweather.presentation.ui.fragments.ForecastFragment"
         android:label="fragment_forecast"
-        tools:layout="@layout/fragment_forecast" />
+        tools:layout="@layout/fragment_forecast">
+        <argument android:name="bs"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
     <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.baiweather.presentation.ui.fragments.ExploreFragment"
         android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/action_exploreFragment_to_forecastFragment"
+            app:destination="@id/forecastFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listFragment"
         android:name="com.example.baiweather.presentation.ui.fragments.ListFragment"

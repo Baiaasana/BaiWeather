@@ -1,7 +1,9 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("androidx.navigation.safeargs")
+    id ("androidx.navigation.safeargs.kotlin")
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
 }
@@ -18,6 +20,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // google maps api_key
+        val keystoreFile = project.rootProject.file("secrets.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        //return empty key in case something goes wrong
+        val apiKey = properties.getProperty("MAPS_API_KEY") ?: ""
+        buildConfigField(
+            type = "String",
+            name = "MAPS_API_KEY",
+            value = apiKey
+        )
     }
 
     buildTypes {
@@ -89,10 +103,19 @@ dependencies {
     implementation(libs.androidx.viewpager2)
 
     implementation (libs.androidx.datastore.preferences)
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.gson)
+
+    implementation (libs.androidx.room.runtime)
+    annotationProcessor (libs.androidx.room.compiler)
+    kapt (libs.androidx.room.compiler)
+
+
+    // Maps SDK for Android
+    implementation ("com.google.android.gms:play-services-maps:19.0.0")
 
 
 }
+
 //
 //kapt {
 //    correctErrorTypes true

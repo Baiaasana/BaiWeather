@@ -1,62 +1,81 @@
 package com.example.baiweather.presentation.ui.fragments
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.JsonReader
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.baiweather.data.remote.CityJson
-import com.example.baiweather.data.remote.CurrentWeatherDto
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.baiweather.R
+import com.example.baiweather.common.Constants
 import com.example.baiweather.databinding.FragmentExploreBinding
+import com.example.baiweather.domain.location.LocationTracker
 import com.example.baiweather.domain.util.Resource
+import com.example.baiweather.presentation.adapters.CitiesAdapter
+import com.example.baiweather.presentation.util.ItemDecorator
+import com.example.baiweather.presentation.util.extensions.resetItemDecoration
+import com.example.baiweather.presentation.viewModels.CitiesViewmodel
+import com.example.baiweather.presentation.viewModels.PreferencesViewmodel
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapColorScheme
+import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.util.Timer
-import java.util.TimerTask
-
+import java.net.URL
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExploreFragment : Fragment() {
+class ExploreFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentExploreBinding? = null
-    lateinit var cities: List<CityJson>
     private val binding get() = _binding!!
 
-    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
+    @Inject
+    lateinit var locationTracker: LocationTracker
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var map: GoogleMap
+    private var searchJob: Job? = null
+    private val delay: Long = 500
 
+    private val citiesAdapter by lazy {
+        CitiesAdapter()
     }
+
+    private val preferencesViewmodel: PreferencesViewmodel by viewModels()
+    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
+    private val citiesViewmodel by viewModels<CitiesViewmodel>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentExploreBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                cities = withContext(Dispatchers.IO) {
-                    readJsonStream(requireContext().assets.open("city.list.json"))
-                }
-
-            } catch (e: Exception) {
-                Log.e("ExploreFragment", "Error searching city", e)
-            }
-        }
+        // Initialize the MapView
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync(this)
+        MapsInitializer.initialize(requireContext())
         return binding.root
     }
 
@@ -64,185 +83,184 @@ class ExploreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         listeners()
         observers()
+        setUpRecycler()
     }
 
-
-    private fun searchCity(query: String): List<String> {
-        val list = mutableListOf<String>()
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val city = query
-                cities.forEach {
-                    if(it.name.contains(city) && !list.contains(it.name)){
-                        list.add(it.name)
-                        Log.d("returnlist 1"," ${list}")
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("ExploreFragment", "Error searching city", e)
-            }
+    private fun setUpRecycler() {
+        binding.rvCities.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = citiesAdapter
         }
-        Log.d("returnlist"," ${list}")
-        return list
-    }
 
-    @Throws(IOException::class)
-    fun readJsonStream(stream: InputStream?): List<CityJson> {
-        val reader: JsonReader = JsonReader(InputStreamReader(stream, "UTF-8"))
-        try {
-            return readCitiesArray(reader)
-        } finally {
-            reader.close()
+        citiesAdapter.onClick = {
+            viewModel.getWeatherByCity(LatLng(it.coord.lat!!, it.coord.lon!!))
         }
-    }
-
-    @Throws(IOException::class)
-    fun readCitiesArray(reader: JsonReader): List<CityJson> {
-        val cities: MutableList<CityJson> = ArrayList<CityJson>()
-
-        reader.beginArray()
-        while (reader.hasNext()) {
-            cities.add(readCity(reader))
-        }
-        reader.endArray()
-        return cities
-    }
-
-    @Throws(IOException::class)
-    fun readCity(reader: JsonReader): CityJson {
-        var id: Int = -1
-        var cityName: String? = ""
-        var country: String? = ""
-        var coord: CityJson.Coordinates? = CityJson.Coordinates()
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            val name: String = reader.nextName()
-            when (name) {
-                "id" -> {
-                    id = reader.nextInt()
-                }
-                "name" -> {
-                    cityName = reader.nextString()
-                }
-                "country" -> {
-                    country = reader.nextString()
-                }
-                "coord" -> {
-                    coord = readCoordinates(reader)
-                }
-                else -> {
-                    reader.skipValue()
-                }
-            }
-        }
-        reader.endObject()
-        return CityJson(id, cityName?:"", country?:"", coord?:CityJson.Coordinates())
-    }
-
-    @Throws(IOException::class)
-    fun readCoordinates(reader: JsonReader): CityJson.Coordinates {
-        var lon: Double? = null
-        var lat: Double? = null
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            val name: String = reader.nextName()
-            if (name == "lon") {
-                lon = reader.nextDouble()
-            } else if (name == "lat") {
-                lat = reader.nextDouble()
-            } else {
-                reader.skipValue()
-            }
-        }
-        reader.endObject()
-        return CityJson.Coordinates(lon, lat)
+        resetItemDecoration(binding.rvCities)
+        binding.rvCities.addItemDecoration(ItemDecorator(12, vertical = true))
     }
 
 
     private fun listeners() {
-//        binding.etSearch.doOnTextChanged { text, start, before, count ->
-//            viewLifecycleOwner.lifecycleScope.launch {
-//                Delay(1000)
-//            }
-//            viewModel.getWeatherByCity(text.toString())
-//        }
 
-        binding.etSearch.addTextChangedListener(
-            object : TextWatcher {
-                private var timer = Timer()
-                private val DELAY: Long = 1000
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun afterTextChanged(s: Editable) {
-                    timer.cancel()
-                    timer = Timer()
-                    timer.schedule(
-                        object : TimerTask() {
-                            override fun run() {
-                                val list = searchCity(s.toString())
-                                Log.d("searchCity", list.toString())
-
-//                                viewModel.getWeatherByCity(s.toString())
-                            }
-                        },
-                        DELAY
-                    )
+        binding.ivMap.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                locationTracker.getCurrentLocation()?.let { location ->
+                    val currentLocation = LatLng(location.latitude, location.longitude)
+                    viewModel.getWeatherByCity(currentLocation)
                 }
             }
-        )
+            showMap()
+        }
 
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.isEmpty()) {
+                    binding.ivNoData.visibility = View.VISIBLE
+                    binding.rvCities.visibility = View.GONE
+                    searchJob?.cancel() // Cancel any ongoing search job when the text is empty
+                } else {
+                    binding.mapView.visibility = View.GONE
+                    searchJob?.cancel()
+                    searchJob = lifecycleScope.launch(Dispatchers.IO) {
+                        delay(delay)
+                        if (s.isNotEmpty()) { // Double-check if s is not empty before performing the search
+                            citiesViewmodel.searchByName(s.toString())
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun observers() {
+        preferencesViewmodel.darkMode.observe(viewLifecycleOwner) {
+            if(::map.isInitialized){
+                if (it == true) {
+                    map.mapColorScheme = MapColorScheme.LIGHT
+                } else {
+                    map.mapColorScheme = MapColorScheme.DARK
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.cityWeatherState.collect {
                     when (it) {
-                        is Resource.Error -> {
-                            Log.d(
-                                "getWeatherByCity error",
-                                "mess - ${it.message.toString()}  data  - ${it.data.toString()}"
-                            )
-
-                            if (it.message!!.isNotBlank()) {
-                                binding.tvError.text = it.message.toString()
-                                binding.tvError.visibility = View.VISIBLE
-                            } else {
-                                binding.tvError.visibility = View.GONE
-                            }
-                            binding.progressBar.visibility = View.GONE
-                        }
-
+                        is Resource.Error -> {}
                         is Resource.Success -> {
-                            Log.d("getWeatherByCity success", it.data.toString())
-//                            setUpUI(it.data)
-                            binding.progressBar.visibility = View.GONE
-                            binding.tvError.visibility = View.GONE
+                            showMap()
+                            val currentLocation =
+                                LatLng(it.data.coordinates?.lat!!, it.data.coordinates.lon!!)
+
+                            try {
+                                val url =
+                                    URL(Constants.getIconUrl(it.data.weather?.get(0)?.icon.toString()))
+
+                                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                                    val bmp = BitmapFactory.decodeStream(
+                                        url.openConnection().getInputStream()
+                                    )
+                                    val smallMarker =
+                                        Bitmap.createScaledBitmap(bmp, 250, 250, false)
+
+                                    launch(Dispatchers.Main) {
+                                        map.clear()
+                                        map.addMarker(
+                                            MarkerOptions()
+                                                .position(currentLocation)
+                                                .title("${it.data.name} \n Click to show weather")
+                                                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                                        )
+
+                                        map.setOnMarkerClickListener {
+                                            viewModel.getCurrentWeather(it.position)
+                                            viewModel.getDailyWeather(it.position)
+                                            this@ExploreFragment.setFragmentResult(
+                                                getString(R.string.requestkey),
+                                                bundleOf(getString(R.string.fromexplore) to true)
+                                            )
+                                            val action =
+                                                ExploreFragmentDirections.actionExploreFragmentToForecastFragment()
+                                            findNavController().navigate(action)
+                                            return@setOnMarkerClickListener true
+                                        }
+
+                                        map.moveCamera(
+                                            CameraUpdateFactory.newLatLngZoom(
+                                                currentLocation,
+                                                12f
+                                            )
+                                        )
+                                    }
+                                }
+                            } catch (e: IOException) {
+                                println(e)
+                            }
                         }
 
-                        is Resource.Loading -> {
-                            Log.d("getWeatherByCity ", "loading")
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.tvError.visibility = View.GONE
-                        }
-
+                        is Resource.Loading -> {}
                         else -> {}
                     }
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                citiesViewmodel.searchResult.collect {
+                    if (it.isEmpty()) {
+                        binding.ivNoData.visibility = View.VISIBLE
+                        binding.rvCities.visibility = View.GONE
+                    } else {
+                        citiesAdapter.submitList(it)
+                        binding.ivNoData.visibility = View.GONE
+                        binding.rvCities.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
-    private fun setUpUI(data: CurrentWeatherDto) = with(binding) {
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        if (preferencesViewmodel.darkMode.value == true) {
+            map.mapColorScheme = MapColorScheme.LIGHT
+        } else {
+            map.mapColorScheme = MapColorScheme.DARK
+        }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            locationTracker.getCurrentLocation()?.let { location ->
+                val currentLocation = LatLng(location.latitude, location.longitude)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 6f))
+            }
+        }
+
+        with(map.uiSettings) {
+            isZoomControlsEnabled = true
+            isCompassEnabled = true
+            isMyLocationButtonEnabled = true
+            isIndoorLevelPickerEnabled = true
+            isMapToolbarEnabled = true
+            isZoomGesturesEnabled = true
+            isScrollGesturesEnabled = true
+            isTiltGesturesEnabled = true
+            isRotateGesturesEnabled = false
+        }
+
+        map.setOnMapClickListener {
+            val currentLocation = LatLng(it.latitude, it.longitude)
+            viewModel.getWeatherByCity(currentLocation)
+        }
+    }
+
+    private fun showMap() {
+        binding.mapView.visibility = View.VISIBLE
+        binding.etSearch.clearFocus()
+        binding.etSearch.text?.clear()
     }
 }

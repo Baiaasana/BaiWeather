@@ -32,10 +32,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-
         val navController =
             (this.childFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment).findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
-
     }
+
 }
