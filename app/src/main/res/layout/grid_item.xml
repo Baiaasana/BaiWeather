@@ -22,13 +22,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Weather App" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvInfo"
         android:layout_width="0dp"
@@ -37,7 +30,6 @@
         android:fontFamily="@font/poppins_medium"
         android:textColor="@color/yellow"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="Weather Info" />
@@ -46,25 +38,24 @@
         android:id="@+id/tvExtraInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_medium"
         android:textColor="@color/secondary_text"
+        android:layout_marginStart="6dp"
+        app:layout_constraintBottom_toBottomOf="@id/tvInfo"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvInfo"
+        app:layout_constraintStart_toEndOf="@id/tvInfo"
+        app:layout_constraintTop_toTopOf="@id/tvInfo"
         tools:text="Additional Info" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/tvInfo"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_sunny"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

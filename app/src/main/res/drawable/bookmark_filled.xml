@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M4,19V5C4,3.895 4.895,3 6,3H18C19.105,3 20,3.895 20,5V19C20,20.648 18.118,21.589 16.8,20.6L13.2,17.9C12.489,17.367 11.511,17.367 10.8,17.9L7.2,20.6C5.882,21.589 4,20.648 4,19Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="@color/selected_bookmark"
+      android:strokeColor="@color/primary_text"/>
+  <path
+      android:pathData="M4,8H20"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="@color/selected_bookmark"
+      android:strokeColor="@color/primary_text"
+      android:strokeLineCap="round"/>
+</vector>

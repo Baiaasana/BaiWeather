@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_primary"
-    android:paddingHorizontal="16dp"
     android:paddingTop="32dp"
     tools:context=".presentation.ui.fragments.ExploreFragment">
 
@@ -14,13 +13,13 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingHorizontal="16dp"
         android:background="@drawable/grid_bg"
         android:drawableStart="@drawable/search_icon"
         android:drawablePadding="12dp"
         android:gravity="center_vertical"
         android:hint="@string/search_here"
-        android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
         android:textColor="@color/white"
         android:textColorHint="@color/background_primary"
@@ -35,7 +34,7 @@
         android:layout_height="30dp"
         android:layout_margin="16dp"
         android:src="@drawable/map"
-        android:tint="@color/primary_text"
+        android:tint="@color/map_color"
         app:layout_constraintBottom_toBottomOf="@id/etSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/etSearch" />
@@ -68,5 +67,40 @@
         app:layout_constraintEnd_toEndOf="@id/etSearch"
         app:layout_constraintStart_toStartOf="@id/etSearch"
         app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCities"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearch" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivNoData"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/no_data"
+        android:visibility="gone"
+        android:layout_margin="100dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearch" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,9 @@
     <color name="yellow_light">#FEEFAD</color>
     <color name="background_medium_reverse">#1F2E3E</color>
     <color name="hint_color">#AFB1B3</color>
+    <color name="map_color">#1679AB</color>
+    <color name="selected_bookmark">#FF731D</color>
+
 
 
 </resources>

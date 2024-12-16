@@ -5,19 +5,24 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.baiweather.R
 import com.example.baiweather.common.Constants
-import com.example.baiweather.data.remote.CurrentWeatherDto
+import com.example.baiweather.data.remote.model.CurrentWeatherDto
 import com.example.baiweather.databinding.FragmentForecastBinding
 import com.example.baiweather.domain.util.Resource
 import com.example.baiweather.presentation.adapters.WeatherPagerAdapter
 import com.example.baiweather.presentation.util.ConnectivityLiveData
 import com.example.baiweather.presentation.util.extensions.setImage
+import com.example.baiweather.presentation.viewModels.CitiesViewmodel
 import com.example.baiweather.presentation.viewModels.PreferencesViewmodel
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -35,13 +40,21 @@ class ForecastFragment : Fragment() {
 
     private lateinit var connectivityLiveData: ConnectivityLiveData
 
-    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(com.example.baiweather.R.id.main_nav_graph)
+    private var froSearch = false
+    private var currentCity: Int = -1
+
+    private val citiesViewmodel by viewModels<CitiesViewmodel>()
+    private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
     private val preferencesViewModel: PreferencesViewmodel by activityViewModels()
 
     private lateinit var weatherPagerAdapter: WeatherPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setFragmentResultListener(getString(R.string.requestkey)) { _, bundle ->
+            val fromExplore = bundle.getBoolean(getString(R.string.fromexplore))
+            froSearch = fromExplore
+        }
         connectivityLiveData = ConnectivityLiveData(application = requireActivity().application)
     }
 
@@ -52,29 +65,32 @@ class ForecastFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             preferencesViewModel.darkMode.observe(viewLifecycleOwner) {
                 if (it) {
-                    binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.sun)
+                    binding.ivDarkMode.setImageResource(R.drawable.sun)
                 } else {
-                    binding.ivDarkMode.setImageResource(com.example.baiweather.R.drawable.moon)
+                    binding.ivDarkMode.setImageResource(R.drawable.moon)
                 }
             }
         }
 
+        if (froSearch) {
+            froSearch = false
+            viewModel.onFragmentReady()
+        }
+        checkConnection()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkConnection()
         init()
         listeners()
-        observers()
     }
 
     private fun checkConnection() {
         connectivityLiveData.observe(viewLifecycleOwner) { isAvailable ->
             when (isAvailable) {
                 true -> {
-                    viewModel.onFragmentReady()
+                    observers()
                     showView()
                 }
 
@@ -105,11 +121,11 @@ class ForecastFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = getString(com.example.baiweather.R.string.today)
+                    tab.text = getString(R.string.today)
                 }
 
                 1 -> {
-                    tab.text = getString(com.example.baiweather.R.string.forecast)
+                    tab.text = getString(R.string.forecast)
                 }
             }
         }.attach()
@@ -117,13 +133,6 @@ class ForecastFragment : Fragment() {
     }
 
     private fun listeners() {
-
-        object : OnClickListener {
-            override fun onClick(v: View?) {
-                TODO("Not yet implemented")
-            }
-
-        }
         binding.pager.isUserInputEnabled = false
         binding.ivDarkMode.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -135,36 +144,56 @@ class ForecastFragment : Fragment() {
                 }
             }
         }
+
+        binding.ivBookmark.setOnClickListener {
+            if (currentCity != -1) {
+                binding.ivBookmark.isSelected = !binding.ivBookmark.isSelected
+                citiesViewmodel.setBookmarkCity(
+                    isFavourite = binding.ivBookmark.isSelected, cityId = currentCity
+                )
+            }
+        }
     }
 
     private fun observers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentWeatherState.collect {
+                    when (it) {
+                        is Resource.Error -> {
+                            if (it.message!!.isNotBlank()) {
+                                binding.tvError.text = it.toString()
+                                binding.tvError.visibility = View.VISIBLE
+                            } else {
+                                binding.tvError.visibility = View.GONE
+                            }
+                            binding.progressBar.visibility = View.GONE
+                            binding.progressBar2.visibility = View.GONE
+                        }
+
+                        is Resource.Success -> {
+                            citiesViewmodel.searchById(it.data.id!!.toInt())
+                            setUpUI(it.data)
+                            currentCity = it.data.id.toInt()
+                            binding.progressBar.visibility = View.GONE
+                            binding.progressBar2.visibility = View.GONE
+                        }
+
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.progressBar2.visibility = View.VISIBLE
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.currentWeatherState.collectLatest {
-                when (it) {
-                    is Resource.Error -> {
-                        if (it.message!!.isNotBlank()) {
-                            binding.tvError.text = it.toString()
-                            binding.tvError.visibility = View.VISIBLE
-                        } else {
-                            binding.tvError.visibility = View.GONE
-                        }
-                        binding.progressBar.visibility = View.GONE
-                        binding.progressBar2.visibility = View.GONE
-                    }
-
-                    is Resource.Success -> {
-                        setUpUI(it.data)
-                        binding.progressBar.visibility = View.GONE
-                        binding.progressBar2.visibility = View.GONE
-                    }
-
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.progressBar2.visibility = View.VISIBLE
-                    }
-
-                    else -> {}
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                citiesViewmodel.searchResult.collectLatest {
+//                    binding.ivBookmark.isSelected = it[0].isFavourite == true
                 }
             }
         }
@@ -173,22 +202,19 @@ class ForecastFragment : Fragment() {
     private fun setUpUI(data: CurrentWeatherDto) = with(binding) {
         tvLocation.text = data.name.toString()
         tvTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.temp?.roundToInt()
+            R.string.temperature, data.main?.temp?.roundToInt()
         )
         tvLowTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.tempMin?.roundToInt()
+            R.string.temperature, data.main?.tempMin?.roundToInt()
         )
         tvHighTemperature.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.tempMax?.roundToInt()
+            R.string.temperature, data.main?.tempMax?.roundToInt()
         )
         tvFeelsLike.text = resources.getString(
-            com.example.baiweather.R.string.temperature, data.main?.feelsLike?.roundToInt()
+            R.string.temperature, data.main?.feelsLike?.roundToInt()
         )
-        tvDescription.text = resources.getString(
-            com.example.baiweather.R.string.weather_desc,
-            data.weather?.get(0)?.main.toString(),
-            data.weather?.get(0)?.description.toString()
-        )
+        tvDescription.text = data.weather?.get(0)?.description.toString()
         ivWeather.setImage(Constants.getIconUrl(data.weather?.get(0)?.icon.toString()))
     }
+
 }

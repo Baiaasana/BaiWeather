@@ -5,17 +5,15 @@ import com.example.baiweather.domain.location.LocationTracker
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class LocationModule {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Binds
-    @ViewModelScoped
     abstract fun bindLocationTracker(defaultLocationTracker: DefaultLocationTracker): LocationTracker
 
 }

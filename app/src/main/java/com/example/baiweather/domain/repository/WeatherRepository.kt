@@ -1,7 +1,7 @@
 package com.example.baiweather.domain.repository
 
-import com.example.baiweather.data.remote.CurrentWeatherDto
-import com.example.baiweather.data.remote.DailyWeatherDto
+import com.example.baiweather.data.remote.model.CurrentWeatherDto
+import com.example.baiweather.data.remote.model.DailyWeatherDto
 import com.example.baiweather.domain.util.Resource
 
 interface WeatherRepository {

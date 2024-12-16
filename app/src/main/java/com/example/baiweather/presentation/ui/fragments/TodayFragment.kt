@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baiweather.R
 import com.example.baiweather.databinding.FragmentTodayBinding
 import com.example.baiweather.domain.util.Resource
-import com.example.baiweather.presentation.adapters.ListItem
-import com.example.baiweather.presentation.adapters.SuperAdapter
+import com.example.baiweather.presentation.adapters.GridAdapter
+import com.example.baiweather.presentation.adapters.HorizontalAdapter
 import com.example.baiweather.presentation.mappers.toGridData
 import com.example.baiweather.presentation.mappers.toHourlyData
 import com.example.baiweather.presentation.viewModels.WeatherViewModel
@@ -24,7 +25,13 @@ class TodayFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by hiltNavGraphViewModels<WeatherViewModel>(R.id.main_nav_graph)
 
-    private val superAdapter by lazy { SuperAdapter() }
+    private val horizontalAdapter by lazy {
+        HorizontalAdapter()
+    }
+
+    private val gridAdapter by lazy {
+        GridAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +49,16 @@ class TodayFragment : Fragment() {
 
     private fun setUpRecycler() {
 
-        binding.rvSuper.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = superAdapter
+        binding.rvHourly.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = horizontalAdapter
+        }
+
+        binding.rvItems.apply {
+            layoutManager =
+                GridLayoutManager(context, 2)
+            adapter = gridAdapter
         }
     }
 
@@ -53,14 +67,10 @@ class TodayFragment : Fragment() {
             viewModel.dailyWeatherState.collectLatest {
                 when (it) {
                     is Resource.Success -> {
-                        val items = listOf(
-                            it.data.toHourlyData()
-                                .let { ListItem.Horizontal(0, getString(R.string.hourly), it) },
-                            it.data.toGridData()
-                                .let { ListItem.Grid(1, getString(R.string.forecast), it) },
-                        )
-                        superAdapter.submitList(items)
+                        horizontalAdapter.submitList(it.data.toHourlyData())
+                        gridAdapter.submitList(it.data.toGridData())
                     }
+
                     else -> {}
                 }
             }

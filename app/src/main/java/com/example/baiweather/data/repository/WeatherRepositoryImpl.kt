@@ -1,8 +1,8 @@
 package com.example.baiweather.data.repository
 
-import com.example.baiweather.data.remote.CurrentWeatherDto
-import com.example.baiweather.data.remote.DailyWeatherDto
 import com.example.baiweather.data.remote.WeatherApi
+import com.example.baiweather.data.remote.model.CurrentWeatherDto
+import com.example.baiweather.data.remote.model.DailyWeatherDto
 import com.example.baiweather.domain.repository.WeatherRepository
 import com.example.baiweather.domain.util.Resource
 import java.net.UnknownHostException
