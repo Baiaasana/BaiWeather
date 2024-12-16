@@ -193,7 +193,7 @@ class ForecastFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 citiesViewmodel.searchResult.collectLatest {
-                    binding.ivBookmark.isSelected = it[0].isFavourite == true
+//                    binding.ivBookmark.isSelected = it[0].isFavourite == true
                 }
             }
         }
